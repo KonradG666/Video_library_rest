@@ -34,6 +34,7 @@ class Videos:
             return True
         return False
 
+
     def delete(self, id):
         video = self.get(id)
         if video:

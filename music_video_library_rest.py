@@ -9,7 +9,7 @@ app.config["SECRET_KEY"] = "nininini"
 def videos_list_api_v1():
     return jsonify(videos.all())
 
-@app.route("/api/v1/library/<int:video_id>/", methods=["GET"])
+@app.route("/api/v1/library/<int:video_id>", methods=["GET"])
 def get_video(video_id):
     video = videos.get(video_id)
     if not video:
@@ -17,15 +17,15 @@ def get_video(video_id):
     return jsonify({"Picture": video})
 
 
-@app.route("/api/v1/library/", methods=["POST"])
+@app.route("/api/v1/library", methods=["POST"])
 def create_video():
     if not request.json or not 'title' in request.json:
         abort(400)
     video = {
         'id': videos.all()[-1]['id'] + 1,
         'title': request.json['title'],
-        'band': request.json.get('band', ""),
-        'genre': ""
+        'band': request.json.get('band', ''),
+        'genre': request.json.get('genre', '')
     }
     videos.create(video)
     return jsonify({"Picture": video}), 201
@@ -47,7 +47,6 @@ def update_video(video_id):
         abort(400)
     data = request.json
     if any([
-        'id' in data and not isinstance(data.get('id'), int),
         'title' in data and not isinstance(data.get('title'), str),
         'band' in data and not isinstance(data.get('band'), str),
         'genre' in data and not isinstance(data.get('genre'), str)
