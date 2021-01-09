@@ -14,10 +14,10 @@ def get_video(video_id):
     video = videos.get(video_id)
     if not video:
         abort(404)
-    return jsonify({"Picture": video})
+    return jsonify(video)
 
 
-@app.route("/api/v1/library", methods=["POST"])
+@app.route("/api/v1/library/", methods=["POST"])
 def create_video():
     if not request.json or not 'title' in request.json:
         abort(400)
@@ -28,7 +28,7 @@ def create_video():
         'genre': request.json.get('genre', '')
     }
     videos.create(video)
-    return jsonify({"Picture": video}), 201
+    return jsonify(video), 201
 
 @app.route("/api/v1/library/<int:video_id>", methods=['DELETE'])
 def delete_video(video_id):
@@ -59,7 +59,7 @@ def update_video(video_id):
         'genre': data.get('genre', video['genre'])
     }
     videos.update(video_id, video)
-    return jsonify({'Picture': video})
+    return jsonify(video)
 
 @app.errorhandler(404)
 def not_found(error):
